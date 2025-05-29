@@ -64,16 +64,24 @@ class ProductController extends Controller
         
     }
 
+    //dependency injection
+    //middleware in route auth
+    //create middleware separately as well
+
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
+
         $validated = $request->validate([
             'product_name'  => 'required|string|max:255',
             'product_price' => 'required|numeric|min:0',
             'quantity'      => 'required|integer|min:1',
         ]);
+
+        $product = Product::findOrFail($id);
 
         $product->update([
             'product_name' => $request-> product_name,
@@ -88,8 +96,10 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
+        //dd($id);
+        $product = Product::findOrFail($id);
         $product->delete();
         return redirect('/product')->with('success', 'Product deleted successfully.');
 

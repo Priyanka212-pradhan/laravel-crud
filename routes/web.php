@@ -3,12 +3,17 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Middleware\AdminMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('product', ProductController::class);
+Route::get('/user-page', function () {
+    return view('user-page');
+})-> middleware('AdminMiddleware::class');
+
+Route::resource('product', ProductController::class)-> middleware('is_admin');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
